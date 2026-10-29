@@ -12,5 +12,5 @@
   "epochs": 30,
   "trained_on": "train temporal split (80%)",
   "test_rmse": 0.693,
-  "created_utc": "2026-10-29T12:37:01.605712+00:00"
+  "created_utc": "2026-10-29T12:56:10.707208+00:00"
 }

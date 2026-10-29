@@ -76,11 +76,29 @@ def main():
     raw_az_csv = root / "datasets" / "raw" / "az" / "az_movies_raw.csv"
     if raw_az_csv.exists():
         raw_az = pd.read_csv(raw_az_csv)
-        # merge original_title, year, overview if available
-        keep_cols = ["original_title", "year", "overview"]
+        script_fixes = {
+            "Кавказ": "Qafqaz",
+            "آتابای": "Atabay",
+            "پوست": "Dəri",
+            "موقعیت مهدی": "Mehdinin Mövqeyi",
+        }
+        for orig, fixed in script_fixes.items():
+            raw_az.loc[raw_az["original_title"] == orig, "original_title"] = fixed
+
+        def format_az_title(row):
+            ot = str(row["original_title"]).strip() if pd.notna(row["original_title"]) else str(row["title"]).strip()
+            yr = int(row["year"]) if pd.notna(row["year"]) and row["year"] > 0 else None
+            return f"{ot} ({yr})" if yr else ot
+
+        raw_az["az_title"] = raw_az.apply(format_az_title, axis=1)
+        raw_az["en_title"] = raw_az["title"]
+
+        keep_cols = ["az_title", "en_title", "original_title", "year", "overview"]
         existing = [c for c in keep_cols if c in raw_az.columns]
         if "title" in raw_az.columns:
             movies_df = movies_df.merge(raw_az[["title"] + existing].drop_duplicates("title"), on="title", how="left")
+            movies_df["title"] = movies_df["az_title"].fillna(movies_df["title"])
+
 
     train_df = pd.read_parquet(az_dir / "ratings_train.parquet")
     test_df = pd.read_parquet(az_dir / "ratings_test.parquet")
@@ -147,7 +165,7 @@ def main():
     )
 
     save_cols = ["movieId", "title", "genres"]
-    for opt_col in ["poster_url", "original_title", "year", "overview"]:
+    for opt_col in ["poster_url", "en_title", "original_title", "year", "overview"]:
         if opt_col in movies_df.columns:
             save_cols.append(opt_col)
 

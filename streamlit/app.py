@@ -149,9 +149,6 @@ def render_row(row_title: str, df, score_col: str | None = None):
                 bg_style = f"background: linear-gradient(135deg, {c1}, {c2});"
 
             display_title = movie["title"]
-            orig = movie.get("original_title")
-            if isinstance(orig, str) and orig.strip() and orig != movie["title"]:
-                display_title = f"{movie['title']} ({orig})"
 
             card_html = (
                 f'<div class="cm-card" style="{bg_style}">'
@@ -231,10 +228,11 @@ st.markdown('<div class="cm-row-title">🔍 Find Similar Movies by Title</div>',
 
 # Pick a sensible default title depending on catalog
 default_search_idx = 0
-for cand in ["Arshin Takes a Wife", "Don't Be Afraid, I'm with You", "Babek", "Toy Story (1995)"]:
+for cand in ["Qorxma, mən səninləyəm (1981)", "Arşın mal alan (1945)", "Qaynana (1978)", "O Olmasın, Bu Olsun (1958)", "Toy Story (1995)"]:
     if cand in rec.title_to_pos:
         default_search_idx = rec.title_to_pos[cand]
         break
+
 
 search_title = st.selectbox(
     "Find movies similar to…",
