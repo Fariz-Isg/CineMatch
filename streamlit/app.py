@@ -136,8 +136,10 @@ def render_row(row_title: str, df, score_col: str | None = None):
         with cols[i % len(cols)]:
             c1, c2 = card_gradient(movie["title"])
             badge = ""
-            if score_col and score_col in movie:
+            if score_col and score_col in movie and pd.notna(movie[score_col]):
                 badge = f'<div class="cm-badge">{int(round(movie[score_col] * 100))}% match</div>'
+            elif "rating" in movie and pd.notna(movie["rating"]):
+                badge = f'<div class="cm-badge" style="color: #ffd700;">★ {movie["rating"]}</div>'
             genres = movie.get("genres", "")
             genres_display = genres.replace("|", " · ") if isinstance(genres, str) else ""
 
@@ -175,6 +177,50 @@ st.markdown(f"""
     </p>
 </div>
 """, unsafe_allow_html=True)
+
+# ----------------------------------------------------------------------------
+# Interactive "Rate a Movie" Feature
+# ----------------------------------------------------------------------------
+if "my_ratings" not in st.session_state:
+    st.session_state.my_ratings = {}
+
+with st.expander("⭐ Rate Movies to Personalize Recommendations", expanded=False):
+    r_col1, r_col2, r_col3 = st.columns([3, 2, 1.2])
+    with r_col1:
+        target_movie = st.selectbox("Choose a movie to rate", rec.movies["title"].tolist(), key="user_rate_select")
+    with r_col2:
+        user_stars = st.slider("Your Rating", 1.0, 5.0, 5.0, 0.5, key="user_rate_stars")
+    with r_col3:
+        st.write("")
+        st.write("")
+        if st.button("Submit Rating ⭐", use_container_width=True):
+            pos = rec.title_to_pos[target_movie]
+            mid = int(rec.movies["movieId"].iloc[pos])
+            poster = rec.movies["poster_url"].iloc[pos] if "poster_url" in rec.movies.columns else None
+            genres = rec.movies["genres"].iloc[pos]
+            st.session_state.my_ratings[mid] = {
+                "movieId": mid,
+                "title": target_movie,
+                "rating": user_stars,
+                "genres": genres,
+                "poster_url": poster,
+            }
+            st.success(f"Rated: {target_movie} with {user_stars} ★!")
+
+    if st.session_state.my_ratings:
+        if st.button("Clear My Ratings"):
+            st.session_state.my_ratings = {}
+            st.rerun()
+
+if st.session_state.my_ratings:
+    rated_list = list(st.session_state.my_ratings.values())
+    rated_df = pd.DataFrame(rated_list)
+    render_row("⭐ Movies You Rated", rated_df)
+
+    liked_mids = [m["movieId"] for m in rated_list if m["rating"] >= 3.0]
+    if liked_mids:
+        custom_recs = rec.recommend_for_new_user(liked_mids, 12)
+        render_row("🎯 Top Picks Based On Your Ratings", custom_recs, score_col="content")
 
 # ----------------------------------------------------------------------------
 # "Who's watching" — profile picker (existing user vs. new user)
