@@ -48,7 +48,9 @@ class Recommender:
         return (x - lo) / (hi - lo) if hi > lo else np.zeros_like(x, dtype=float)
 
     def _frame(self, order, cols):
-        out = self.movies.iloc[order][["movieId", "title", "genres"]].reset_index(drop=True)
+        base_cols = [c for c in ["movieId", "title", "genres", "poster_url", "en_title", "original_title", "year", "overview"]
+                     if c in self.movies.columns]
+        out = self.movies.iloc[order][base_cols].reset_index(drop=True)
         for name, values in cols.items():
             out[name] = np.round(np.asarray(values, dtype=float)[order], 3)
         out["num_ratings"] = self.num_ratings[order]
@@ -62,8 +64,11 @@ class Recommender:
 
     def user_history(self, user_id, n=10):
         h = self.ratings.loc[self.ratings["userId"] == user_id].merge(self.movies, on="movieId")
+        keep = ["title", "genres", "rating"]
+        if "poster_url" in h.columns:
+            keep.append("poster_url")
         return (h.sort_values("rating", ascending=False)
-                 .head(n)[["title", "genres", "rating"]].reset_index(drop=True))
+                 .head(n)[keep].reset_index(drop=True))
 
     def recommend(self, user_id, alpha=None, n=10):
         """Hybrid top-N for a known user. alpha: 1 = pure CF, 0 = pure content."""

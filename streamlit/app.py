@@ -49,7 +49,7 @@ st.markdown("""
     .cm-card {
         border-radius: 6px;
         padding: 14px 12px;
-        height: 180px;
+        height: 220px;
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
@@ -144,7 +144,10 @@ def render_row(row_title: str, df, score_col: str | None = None):
             poster = movie.get("poster_url")
             has_poster = isinstance(poster, str) and poster.startswith("http")
             if has_poster:
-                bg_style = f"background: linear-gradient(to top, rgba(12,12,12,0.92) 0%, rgba(12,12,12,0.45) 55%, rgba(0,0,0,0.15) 100%), url('{poster}') center/cover;"
+                bg_style = (
+                    f"background-image: linear-gradient(to top, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.45) 50%, rgba(0,0,0,0.1) 100%), url('{poster}'); "
+                    f"background-size: cover; background-position: center; background-repeat: no-repeat;"
+                )
             else:
                 bg_style = f"background: linear-gradient(135deg, {c1}, {c2});"
 
