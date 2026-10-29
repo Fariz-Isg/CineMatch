@@ -11,10 +11,10 @@
 
 | Name | Role | Responsibilities |
 |---|---|---|
-| **Fariz Isgandarli** | ML Inference & Systems Architect | Serving-side inference engine, real-time rating adaptation loop, checkpoint serialization, deployment |
-| **[Member 2]** | Latent Factor & CF Engineer | FunkSVD algorithm, SGD optimization, bias modeling, RMSE benchmarks |
-| **[Member 3]** | NLP & Cold-Start Specialist | TF-IDF genre vectors, hybrid blending, item-to-item similarity, cold-start resolution |
-| **[Member 4]** | Data Pipeline & ETL Architect | Azerbaijani cinema pipeline, TMDB enrichment, synthetic ratings, temporal data splits |
+| **Fariz Isgandarli** | Data Engineer & EDA Specialist | Azerbaijani cinema pipeline, TMDB enrichment, synthetic rating generation, exploratory data analysis, temporal train/test splits |
+| **Kanan Goylarov** | Lead ML Engineer | FunkSVD algorithm design, SGD optimization, bias modeling, hybrid formula, RMSE benchmarking |
+| **Nuri Ahmedov** | Backend, Deployment & QA Engineer | Serving-side inference engine, real-time rating adaptation, checkpoint serialization, Streamlit Cloud deployment, testing |
+| **Nihad Qocayev** | ML Engineer | TF-IDF genre vector embeddings, content-based filtering, item-to-item similarity, cold-start resolution |
 
 ---
 
