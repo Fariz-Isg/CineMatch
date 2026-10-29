@@ -11,5 +11,8 @@ venv/
 # so they aren't committed. See datasets/README.md to regenerate them.
 datasets/raw/*
 !datasets/raw/.gitkeep
+!datasets/raw/az/
+!datasets/raw/az/**
 datasets/processed/*
 !datasets/processed/.gitkeep
+

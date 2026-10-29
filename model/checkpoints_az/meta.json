@@ -1,0 +1,16 @@
+{
+  "model": "FunkSVD (biased MF, SGD) + genre TF-IDF hybrid",
+  "dataset": "Azerbaijani Cinema (TMDB top-100 catalog + synthetic ratings)",
+  "catalog_type": "az",
+  "n_users": 400,
+  "n_items": 100,
+  "n_ratings": 15205,
+  "n_users_sampled": 400,
+  "min_movie_ratings": 1,
+  "k": 30,
+  "best_alpha": 0.7,
+  "epochs": 30,
+  "trained_on": "train temporal split (80%)",
+  "test_rmse": 0.693,
+  "created_utc": "2026-10-29T12:37:01.605712+00:00"
+}

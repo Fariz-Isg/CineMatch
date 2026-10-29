@@ -37,9 +37,24 @@ MOVIES_ENRICHED_PATH = RAW_DIR / "movies_enriched.csv"
 TEST_FRACTION = 0.2
 MIN_TEST_RATINGS_PER_USER = 1
 
+# Azerbaijani-films pipeline (az_*.py scripts)
+AZ_RAW_DIR = RAW_DIR / "az"
+AZ_PROCESSED_DIR = DATASETS_DIR / "processed_az"
+AZ_MOVIES_RAW_PATH = AZ_RAW_DIR / "az_movies_raw.csv"
+
+for _dir in (AZ_RAW_DIR, AZ_PROCESSED_DIR):
+    _dir.mkdir(parents=True, exist_ok=True)
+
+AZ_RANDOM_SEED = 42
+AZ_TOP_N_MOVIES = 100
+AZ_N_SYNTHETIC_USERS = 400
+AZ_MIN_RATINGS_PER_USER = 15
+AZ_MAX_RATINGS_PER_USER = 60
+
 # Env var opt-in, off by default: only set this if you've independently
 # confirmed files.grouplens.org's TLS cert is the problem (not a
 # man-in-the-middle) and you accept skipping verification for that one host.
 ALLOW_INSECURE_MOVIELENS_DOWNLOAD = os.environ.get(
     "ALLOW_INSECURE_MOVIELENS_DOWNLOAD", ""
 ) == "1"
+
